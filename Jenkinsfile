@@ -1,4 +1,5 @@
 pipeline {
+
     agent any
 
     environment {
@@ -20,6 +21,15 @@ pipeline {
                 sh '''
                     mvn dependency:go-offline
                     mvn clean package -DskipTests
+                '''
+            }
+        }
+
+        stage('Copy JAR File to Docker Context') {
+            steps {
+                sh '''
+                    rm -f app.jar
+                    cp /root/.jenkins/workspace/multi-branch_Feature/target/*.jar app.jar
                 '''
             }
         }
