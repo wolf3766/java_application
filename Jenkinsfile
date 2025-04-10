@@ -1,31 +1,23 @@
 pipeline {
+    agent any
 
-   agent any
+    stages {
+        stage('Git Cloning') {
+            steps {
+                // Clone code from the GitHub repository
+                git branch: 'Feature', url: 'https://github.com/wolf3766/java_application.git'
+            }
+        }
 
-   stages {
-
-       stage('git cloninig') {
-
-           steps {
-
-               // Get some code from a GitHub repository
-
-               git branch: 'Feature', url:'https://github.com/wolf3766/java_application.git'
-
-           }
-
-       }
-
-       stage('Building jar file for project') {
-
-           steps {
-                sh "mvn dependency:go-offline"
-                sh "mvn clean package -DskipTests"
-
-           }
-
-       }
-
-   }
-
+        stage('Build JAR File') {
+            steps {
+                // Download dependencies
+                sh 'mvn dependency:go-offline'
+                
+                // Build the project, skipping tests
+                sh 'mvn clean package -DskipTests'
+            }
+        }
+    }
 }
+
